@@ -14,6 +14,7 @@ import { SelectButton } from 'primereact/selectbutton';
 import { FileUpload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Divider } from 'primereact/divider';
 
 // --- MOCK DATA & CONFIGURATIONS ---
 
@@ -48,7 +49,7 @@ const MOCK_EDUCATION = [
     { id: 1, categoria: 'Secundaria', institucion: 'Colegio Y', descripcion: '', inicio: '2024-06-05', fin: '2025-07-30' }
 ];
 
-// --- NUEVAS OPCIONES PARA LOS SUB-MODALES ---
+// ---  OPCIONES PARA LOS SUB-MODALES ---
 const MOCK_CATEGORIAS_EDU = [
     { label: 'Educacion Primaria', value: 'PRIMARIA' },
     { label: 'Educacion Secundaria', value: 'SECUNDARIA' },
@@ -85,7 +86,7 @@ const MOCK_TIPO_CUENTA = [
 export default function EmployeeForm() {
     const toast = useRef(null);
 
-    // Inicializamos con los datos Mock, pero ahora son editables
+    // Inicializamos con los datos Mock,
     const [phones, setPhones] = useState(MOCK_PHONES);
     const emptyPhone = {
         id: null,
@@ -115,7 +116,7 @@ export default function EmployeeForm() {
         lugarNacimiento: 'UIO',
         email: 'correo@electrico.vom',
         tipoSangre: 'O+',
-        pension: 'NO', // Default NO
+        pension: 'NO', 
         estadoCivil: 'CASADO',
         ubicacionGPS: '',
     });
@@ -309,153 +310,193 @@ export default function EmployeeForm() {
             <Card header={header} className="w-full shadow-4" style={{ maxWidth: '1200px' }}>
                 <div className="p-fluid formgrid grid">
 
-                    {/* --- FILA 1: IDENTIFICACIÓN --- */}
-                    <div className="field col-12 md:col-4">
-                        <label>Tipo identificador</label>
-                        <div className="p-inputgroup">
-                            <Dropdown value={formData.tipoDoc} options={MOCK_DB_CONFIG.docTypes} onChange={(e) => handleChange('tipoDoc', e.value)} placeholder="Seleccione" />
-                        </div>
+                    {/* ================= SECCIÓN 1: IDENTIFICACIÓN ================= */}
+                    <div className="col-12">
+                        <Divider align="left">
+                            <div className="inline-flex align-items-center">
+                                <i className="pi pi-id-card mr-2"></i>
+                                <b>Identificación</b>
+                            </div>
+                        </Divider>
+                    </div>
+
+                    <div className="field col-12 md:col-2">
+                        <label>Tipo Doc.</label>
+                        <Dropdown value={formData.tipoDoc} options={MOCK_DB_CONFIG.docTypes} onChange={(e) => handleChange('tipoDoc', e.value)} />
                     </div>
                     <div className="field col-12 md:col-4">
                         <label>Nro Identificador</label>
-                        <InputText value={formData.nroIdentificador} onChange={(e) => handleChange('nroIdentificador', e.target.value)} />
+                        <InputText value={formData.nroIdentificador} onChange={(e) => handleChange('nroIdentificador', e.target.value)} className="font-bold" />
                     </div>
-                    <div className="field col-12 md:col-4"></div>
-
-                    {/* --- FILA 2: NOMBRES --- */}
-                    <div className="field col-12 md:col-6">
+                    <div className="field col-12 md:col-3">
                         <label>Nombre</label>
                         <InputText value={formData.nombre} onChange={(e) => handleChange('nombre', e.target.value)} />
                     </div>
-                    <div className="field col-12 md:col-6">
+                    <div className="field col-12 md:col-3">
                         <label>Apellidos</label>
                         <InputText value={formData.apellidos} onChange={(e) => handleChange('apellidos', e.target.value)} />
                     </div>
 
-                    {/* --- FILA 3: DATOS DEMOGRÁFICOS --- */}
-                    <div className="field col-12 md:col-4">
-                        <label>Nacionalidad (Config)</label>
-                        <div className="p-inputgroup">
-                            <Dropdown value={formData.nacionalidad} options={MOCK_DB_CONFIG.nationalities} onChange={(e) => handleChange('nacionalidad', e.value)} />
-                        </div>
-                    </div>
-                    <div className="field col-12 md:col-4">
-                        <label>Estatura</label>
-                        <InputNumber value={formData.estatura} onValueChange={(e) => handleChange('estatura', e.value)} suffix=" metros" minFractionDigits={2} />
+                    {/* ================= SECCIÓN 2: DATOS PERSONALES ================= */}
+                    <div className="col-12">
+                        <Divider align="left">
+                            <div className="inline-flex align-items-center">
+                                <i className="pi pi-user mr-2"></i>
+                                <b>Datos Personales</b>
+                            </div>
+                        </Divider>
                     </div>
 
-                    {/* --- FILA 4: FECHAS --- */}
+                    <div className="field col-12 md:col-3">
+                        <label>Nacionalidad</label>
+                        <Dropdown value={formData.nacionalidad} options={MOCK_DB_CONFIG.nationalities} onChange={(e) => handleChange('nacionalidad', e.value)} />
+                    </div>
+                    <div className="field col-12 md:col-3">
+                        <label>Lugar Nacimiento</label>
+                        <Dropdown value={formData.lugarNacimiento} options={MOCK_DB_CONFIG.cities} onChange={(e) => handleChange('lugarNacimiento', e.value)} />
+                    </div>
                     <div className="field col-12 md:col-2">
+                        <label>Estatura</label>
+                        <InputNumber value={formData.estatura} onValueChange={(e) => handleChange('estatura', e.value)} suffix=" m" minFractionDigits={2} />
+                    </div>
+                    <div className="field col-12 md:col-2">
+                        <label>Tipo Sangre</label>
+                        <Dropdown value={formData.tipoSangre} options={MOCK_DB_CONFIG.bloodTypes} onChange={(e) => handleChange('tipoSangre', e.value)} />
+                    </div>
+                    <div className="field col-12 md:col-2">
+                        <label>Estado Civil</label>
+                        <Dropdown value={formData.estadoCivil} options={MOCK_DB_CONFIG.civilStatus} onChange={(e) => handleChange('estadoCivil', e.value)} />
+                    </div>
+
+                    {/* ================= SECCIÓN 3: CONTRATACIÓN Y LEGAL ================= */}
+                    <div className="col-12">
+                        <Divider align="left">
+                            <div className="inline-flex align-items-center">
+                                <i className="pi pi-briefcase mr-2"></i>
+                                <b>Información Contractual y Legal</b>
+                            </div>
+                        </Divider>
+                    </div>
+
+                    <div className="field col-12 md:col-3">
                         <label>Fecha Ingreso</label>
                         <Calendar value={formData.fechaIngreso} onChange={(e) => handleChange('fechaIngreso', e.value)} showIcon dateFormat="dd/mm/yy" />
                     </div>
-                    <div className="field col-12 md:col-2">
+                    <div className="field col-12 md:col-3">
                         <label>Fecha Fin</label>
                         <Calendar value={formData.fechaFin} onChange={(e) => handleChange('fechaFin', e.value)} showIcon dateFormat="dd/mm/yy" />
                     </div>
-
-                    {/* --- FILA 5: LUGAR Y EMAIL --- */}
-                    <div className="field col-12 md:col-4">
-                        <label>Lugar Nacimiento (Config)</label>
-                        <div className="p-inputgroup">
-                            <Dropdown value={formData.lugarNacimiento} options={MOCK_DB_CONFIG.cities} onChange={(e) => handleChange('lugarNacimiento', e.value)} />
-                        </div>
+                    <div className="field col-12 md:col-3">
+                        <label className="block mb-2">Pensión alimentaria</label>
+                        <SelectButton value={formData.pension} options={PENSION_OPTIONS} onChange={(e) => handleChange('pension', e.value)} className="w-full" />
                     </div>
-                    <div className="field col-12 md:col-4">
+                    <div className="field col-12 md:col-3">
                         <label>Correo Electronico</label>
                         <InputText value={formData.email} onChange={(e) => handleChange('email', e.target.value)} />
                     </div>
 
-                    {/* --- FILA 6: BOTONES DE ADICIÓN (LICENCIA/LIBRETA) --- */}
-                    <div className="field col-12 md:col-6 flex align-items-end gap-2">
-                        <div className="flex-1">
-                            <label>Licencia</label>
+                    {/* Sub-sección de documentos específicos */}
+                    <div className="field col-12 md:col-6 mt-2">
+                        <label className="font-bold text-500">Licencia de Conducir</label>
+                        <div className="p-inputgroup">
                             <InputText value="Datos cargados..." readOnly className="surface-200" />
+                            <Button label="Gestionar" icon="pi pi-id-card" className="p-button-outlined" onClick={() => toggleModal('licencia')} />
                         </div>
-                        <Button label="Adición Licencia" icon="pi pi-id-card" onClick={() => toggleModal('licencia')} />
                     </div>
-                    <div className="field col-12 md:col-6 flex align-items-end gap-2">
-                        <div className="flex-1">
-                            <label>Libreta Militar</label>
+                    <div className="field col-12 md:col-6 mt-2">
+                        <label className="font-bold text-500">Libreta Militar</label>
+                        <div className="p-inputgroup">
                             <InputText value="Sin datos" readOnly className="surface-200" />
-                        </div>
-                        <Button label="Adición Libreta" icon="pi pi-book" onClick={() => toggleModal('libreta')} />
-                    </div>
-
-                    {/* --- FILA 7: OTROS DATOS (SelectButton, GPS) --- */}
-                    <div className="field col-12 md:col-3">
-                        <label className="block mb-2">Pensión alimentaria</label>
-                        {/* REEMPLAZO: SelectButton en lugar de texto */}
-                        <SelectButton value={formData.pension} options={PENSION_OPTIONS} onChange={(e) => handleChange('pension', e.value)} />
-                    </div>
-
-                    <div className="field col-12 md:col-3">
-                        <label>Tipo de sangre (Config)</label>
-                        <div className="p-inputgroup">
-                            <Dropdown value={formData.tipoSangre} options={MOCK_DB_CONFIG.bloodTypes} onChange={(e) => handleChange('tipoSangre', e.value)} />
+                            <Button label="Gestionar" icon="pi pi-book" className="p-button-outlined" onClick={() => toggleModal('libreta')} />
                         </div>
                     </div>
 
-                    <div className="field col-12 md:col-3">
-                        <label>Estado Civil (Config)</label>
-                        <div className="p-inputgroup">
-                            <Dropdown value={formData.estadoCivil} options={MOCK_DB_CONFIG.civilStatus} onChange={(e) => handleChange('estadoCivil', e.value)} />
-                        </div>
+
+                    {/* ================= SECCIÓN 4: UBICACIÓN Y CONTACTO ================= */}
+                    <div className="col-12">
+                        <Divider align="left">
+                            <div className="inline-flex align-items-center">
+                                <i className="pi pi-map mr-2"></i>
+                                <b>Ubicación y Contacto</b>
+                            </div>
+                        </Divider>
                     </div>
 
-                    {/* --- GPS & TELÉFONOS --- */}
                     <div className="field col-12 md:col-6">
-                        <label>Ubicación GPS (Google Maps)</label>
+                        <label>Ubicación GPS</label>
                         <div className="p-inputgroup">
-                            <InputText value={formData.ubicacionGPS} placeholder="Seleccione en mapa" readOnly />
-                            <Button icon="pi pi-map-marker" className="p-button-danger" onClick={() => toggleModal('mapa')} />
+                            <span className="p-inputgroup-addon"><i className="pi pi-map-marker text-red-500"></i></span>
+                            <InputText value={formData.ubicacionGPS} placeholder="Seleccione en mapa..." readOnly />
+                            <Button label="Abrir Mapa" className="p-button-secondary" onClick={() => toggleModal('mapa')} />
                         </div>
                     </div>
-                    <div className="field col-12 md:col-6 flex align-items-end">
-                        <Button label="Ver Teléfonos" icon="pi pi-phone" className="p-button-info w-full" onClick={() => toggleModal('telefonos')} />
+                    <div className="field col-12 md:col-6">
+                        <label>Teléfonos de Contacto</label>
+                        <div className="p-inputgroup">
+                            <span className="p-inputgroup-addon"><i className="pi pi-phone"></i></span>
+                            <InputText value={`${phones.length} registrados`} readOnly />
+                            <Button label="Ver Lista" className="p-button-info" onClick={() => toggleModal('telefonos')} />
+                        </div>
                     </div>
 
-                    {/* --- FILA 8: FOTO Y BOTONES INFERIORES --- */}
-                    <div className="col-12 mt-4 border-top-1 surface-border pt-4">
-                        <div className="grid">
-                            {/* FOTOGRAFÍA (FileUpload Múltiple) */}
-                            <div className="col-12 md:col-4">
-                                <label className="block mb-2 font-bold">Fotografía(s) Empleado</label>
-                                <FileUpload
-                                    name="demo[]"
-                                    mode="advanced"
-                                    chooseLabel="Agregar"
-                                    uploadLabel="Subir"
-                                    cancelLabel="Cancelar"
-                                    multiple
-                                    accept="image/*"
-                                    maxFileSize={1000000}
-                                    emptyTemplate={<p className="m-0">Arrastre imágenes aquí.</p>}
-                                />
+
+                    {/* ================= SECCIÓN 5: EXPEDIENTE DIGITAL (FOTOS Y MÓDULOS) ================= */}
+                    <div className="col-12">
+                        <Divider align="center">
+                            <span className="p-tag p-tag-rounded p-tag-info px-3">Expediente Digital</span>
+                        </Divider>
+                    </div>
+
+                    {/* LAYOUT INFERIOR: FOTO A LA IZQ, BOTONES A LA DER */}
+                    <div className="col-12">
+                        <div className="grid h-full">
+                            
+                            <div className="col-12 md:col-4 flex flex-column">
+                                <div className="surface-card p-4 shadow-2 border-round flex-grow-1 flex flex-column align-items-center justify-content-center border-1 surface-border">
+                                    <div className="text-900 font-medium text-xl mb-3">Fotografía</div>
+                                    <div className="w-full">
+                                        <FileUpload
+                                            mode="advanced"
+                                            name="demo[]"
+                                            chooseLabel="Elegir"
+                                            uploadLabel="Cargar"
+                                            cancelLabel="X"
+                                            customUpload
+                                            uploadHandler={() => { }} 
+                                            accept="image/*"
+                                            maxFileSize={1000000}
+                                            emptyTemplate={<div className="flex align-items-center flex-column"><i className="pi pi-image mt-3 p-5 text-4xl text-400 border-2 border-circle border-dashed surface-border"></i><p className="mt-4 mb-0">Arrastre su foto aquí.</p></div>}
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* GRILLA DE BOTONES AZULES */}
+                           
                             <div className="col-12 md:col-8">
-                                <div className="grid">
-                                    <div className="col-6 md:col-4 mb-2">
-                                        <Button label="Ver Educación" icon="pi pi-briefcase" className="p-button-info w-full" onClick={() => toggleModal('educacion')} />
-                                    </div>
-                                    <div className="col-6 md:col-4 mb-2">
-                                        <Button label="Ver Cuentas" icon="pi pi-wallet" className="p-button-info w-full" onClick={() => toggleModal('cuentas')} />
-                                    </div>
-                                    <div className="col-6 md:col-4 mb-2">
-                                        <Button label="Ver Historial" icon="pi pi-history" className="p-button-info w-full" onClick={() => toggleModal('historial')} />
-                                    </div>
-                                    <div className="col-6 md:col-4 mb-2">
-                                        <Button label="Ver Familia" icon="pi pi-users" className="p-button-info w-full" onClick={() => toggleModal('familia')} />
-                                    </div>
-                                    <div className="col-6 md:col-4 mb-2">
-                                        <Button label="Ver Otros Docs" icon="pi pi-file" className="p-button-info w-full" onClick={() => toggleModal('otrosDocs')} />
+                                <div className="surface-card p-4 shadow-2 border-round border-1 surface-border h-full">
+                                    <div className="text-900 font-medium text-xl mb-3">Módulos Adicionales</div>
+                                    <div className="grid">
+                                        <div className="col-12 md:col-6 lg:col-4">
+                                            <Button label="Educación" icon="pi pi-briefcase" className="p-button-outlined p-button-info w-full h-full py-3" onClick={() => toggleModal('educacion')} />
+                                        </div>
+                                        <div className="col-12 md:col-6 lg:col-4">
+                                            <Button label="Cuentas Banco" icon="pi pi-wallet" className="p-button-outlined p-button-info w-full h-full py-3" onClick={() => toggleModal('cuentas')} />
+                                        </div>
+                                        <div className="col-12 md:col-6 lg:col-4">
+                                            <Button label="Historial" icon="pi pi-history" className="p-button-outlined p-button-info w-full h-full py-3" onClick={() => toggleModal('historial')} />
+                                        </div>
+                                        <div className="col-12 md:col-6 lg:col-4">
+                                            <Button label="Familia" icon="pi pi-users" className="p-button-outlined p-button-info w-full h-full py-3" onClick={() => toggleModal('familia')} />
+                                        </div>
+                                        <div className="col-12 md:col-6 lg:col-4">
+                                            <Button label="Otros Docs" icon="pi pi-file" className="p-button-outlined p-button-info w-full h-full py-3" onClick={() => toggleModal('otrosDocs')} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </Card>
 
@@ -466,7 +507,7 @@ export default function EmployeeForm() {
                 <MockMap />
             </Dialog>
 
-            {/* 2. LICENCIA (Formulario según imagen 57034d) */}
+            {/* 2. LICENCIA */}
             <Dialog header="Documentos - Licencia" visible={modals.licencia} style={{ width: '500px' }} onHide={() => toggleModal('licencia', false)}>
                 <div className="p-fluid formgrid grid">
                     <div className="field col-12">
@@ -495,7 +536,7 @@ export default function EmployeeForm() {
                 </div>
             </Dialog>
 
-            {/* 3. LIBRETA MILITAR (Similar a licencia) */}
+            {/* 3. LIBRETA MILITAR  */}
             <Dialog header="Documentos - Libreta" visible={modals.libreta} style={{ width: '500px' }} onHide={() => toggleModal('libreta', false)}>
                 <div className="p-fluid formgrid grid">
                     <div className="field col-12">
@@ -525,11 +566,9 @@ export default function EmployeeForm() {
                 </div>
             </Dialog>
 
-            {/* 4. TELÉFONOS (Tabla CRUD) */}
-            {/* 4. TELÉFONOS (LISTA PRINCIPAL) */}
+            {/* 4. TELÉFONOS  */}
             <Dialog header="Teléfonos" visible={modals.telefonos} style={{ width: '700px' }} onHide={() => toggleModal('telefonos', false)}>
 
-                {/* Botón ADICIONAR llama a openNewPhone */}
                 <div className="flex justify-content-end mb-3">
                     <Button label="Adicionar" icon="pi pi-plus" className="p-button-primary p-button-sm" onClick={openNewPhone} />
                 </div>
@@ -540,7 +579,6 @@ export default function EmployeeForm() {
 
                     <Column header="Principal" body={principalPhoneTemplate} style={{ width: '100px', textAlign: 'center' }}></Column>
 
-                    {/* Columna Acciones Personalizada para Teléfonos */}
                     <Column header="Acciones" body={(rowData) => (
                         <div className="flex gap-2 justify-content-center">
                             {/* Botón EDITAR: Llama a openEditPhone con los datos de la fila */}
@@ -555,7 +593,7 @@ export default function EmployeeForm() {
                 </DataTable>
             </Dialog>
 
-            {/* 5. EDUCACIÓN (Tabla CRUD Compleja - Imagen 5703e5) */}
+            {/* 5. EDUCACIÓN */}
             <Dialog header="Educación" visible={modals.educacion} style={{ width: '900px' }} onHide={() => toggleModal('educacion', false)}>
                 <div className="flex justify-content-end mb-3">
                     <Button label="Nuevo" onClick={() => toggleModal('addEducacion', true)} icon="pi pi-plus" className="p-button-primary" />
@@ -566,13 +604,12 @@ export default function EmployeeForm() {
                     <Column field="descripcion" header="Descripción"></Column>
                     <Column field="inicio" header="Fecha Inicio"></Column>
                     <Column field="fin" header="Fecha Fin"></Column>
-                    {/* Columna de Acciones */}
+
                     <Column header="Acciones" body={actionBodyTemplate} style={{ minWidth: '8rem', textAlign: 'center' }}></Column>
                 </DataTable>
             </Dialog>
 
-            {/* NOTA: Repetir patrón de Dialog para Cuentas, Historial, Familia, Otros Docs según necesidad */}
-            {/* 6. CUENTAS BANCARIAS (CORREGIDO) */}
+            {/* 6. CUENTAS BANCARIAS */}
             <Dialog header="Cuentas Bancarias" visible={modals.cuentas} style={{ width: '800px' }} onHide={() => toggleModal('cuentas', false)}>
                 <div className="flex justify-content-end mb-3">
                     <Button label="Adicionar" icon="pi pi-plus" onClick={() => toggleModal('addCuenta', true)} className="p-button-primary p-button-sm" />
@@ -583,7 +620,6 @@ export default function EmployeeForm() {
                     <Column field="banco" header="Banco"></Column>
                     <Column field="tipo" header="Tipo Cuenta"></Column>
 
-                    {/* Columna Principal Interactiva */}
                     <Column
                         header="Principal"
                         body={principalAccountTemplate}
@@ -593,7 +629,7 @@ export default function EmployeeForm() {
                     <Column header="Acciones" body={actionBodyTemplate} style={{ minWidth: '8rem', textAlign: 'center' }}></Column>
                 </DataTable>
             </Dialog>
-            {/* 7. HISTORIAL (Imagen 570389) */}
+            {/* 7. HISTORIAL */}
             <Dialog header="Historial" visible={modals.historial} style={{ width: '700px' }} onHide={() => toggleModal('historial', false)}>
                 <div className="flex justify-content-end mb-3">
                     <Button label="Nuevo" icon="pi pi-plus" onClick={() => toggleModal('addHistorial')} className="p-button-primary" />
@@ -602,12 +638,12 @@ export default function EmployeeForm() {
                     <Column field="tipo" header="Tipo"></Column>
                     <Column field="numero" header="Numero"></Column>
                     <Column field="fecha" header="Fecha"></Column>
-                    {/* Columna de Acciones */}
+
                     <Column header="Acciones" body={actionBodyTemplate} style={{ minWidth: '8rem', textAlign: 'center' }}></Column>
                 </DataTable>
             </Dialog>
 
-            {/* 8. INFORMACIÓN FAMILIAR (Imagen 5703a6) */}
+            {/* 8. INFORMACIÓN FAMILIAR */}
             <Dialog header="Información Familiar" visible={modals.familia} style={{ width: '900px' }} onHide={() => toggleModal('familia', false)}>
                 <div className="flex justify-content-end mb-3">
                     <Button label="Nuevo" icon="pi pi-plus" onClick={() => toggleModal('addFamilia', true)} className="p-button-primary" />
@@ -618,12 +654,12 @@ export default function EmployeeForm() {
                     <Column field="nombre" header="Nombre"></Column>
                     <Column field="parentesco" header="Parentesco"></Column>
                     <Column field="fecha" header="Fecha"></Column>
-                    {/* Columna de Acciones */}
+
                     <Column header="Acciones" body={actionBodyTemplate} style={{ minWidth: '8rem', textAlign: 'center' }}></Column>
                 </DataTable>
             </Dialog>
 
-            {/* 9. OTROS DOCUMENTOS (Imagen 5703c7) */}
+            {/* 9. OTROS DOCUMENTOS */}
             <Dialog header="Otros Documentos" visible={modals.otrosDocs} style={{ width: '800px' }} onHide={() => toggleModal('otrosDocs', false)}>
                 <div className="flex justify-content-end mb-3">
                     <Button label="Nuevo" icon="pi pi-plus" onClick={() => toggleModal('addOtrosDocs', true)} className="p-button-primary" />
@@ -633,7 +669,7 @@ export default function EmployeeForm() {
                     <Column field="numero" header="Numero"></Column>
                     <Column field="inicio" header="Fecha Inicio"></Column>
                     <Column field="fin" header="Fecha Fin"></Column>
-                    {/* Columna de Acciones */}
+
                     <Column header="Acciones" body={actionBodyTemplate} style={{ minWidth: '8rem', textAlign: 'center' }}></Column>
                 </DataTable>
             </Dialog>
@@ -654,10 +690,7 @@ export default function EmployeeForm() {
                         <label>Categoría</label>
                         <Dropdown options={MOCK_CATEGORIAS_EDU} placeholder="Seleccione" />
                     </div>
-                    <div className="field col-12 md:col-6">
-                        {/* Espacio vacío para alinear si es necesario, o campo oculto */}
-                    </div>
-
+                  
                     <div className="field col-12 md:col-6">
                         <label>Institución</label>
                         <InputText placeholder="Ej: Colegio X" />
@@ -676,7 +709,6 @@ export default function EmployeeForm() {
                         <Calendar showIcon dateFormat="dd/mm/yy" />
                     </div>
 
-                    {/* Botones inferiores (Adjuntar a la izq, Guardar a la der) */}
                     <div className="col-12 flex justify-content-between mt-3">
                         <FileUpload mode="basic" chooseLabel="Adjuntar documento" className="p-button-info" auto customUpload uploadHandler={() => { }} />
                         <Button label="Guardar" className="p-button-primary w-auto" onClick={() => toggleModal('addEducacion', false)} />
@@ -685,7 +717,7 @@ export default function EmployeeForm() {
             </Dialog>
 
 
-            {/* 2. ADICIÓN DE OTROS DOCUMENTOS (Imagen 4c7fe0) */}
+            {/* 2. ADICIÓN DE OTROS DOCUMENTOS */}
             <Dialog header="Adición de otros documentos" visible={modals.addOtrosDocs} style={{ width: '600px' }} onHide={() => toggleModal('addOtrosDocs', false)}>
                 <div className="p-fluid formgrid grid">
                     <div className="field col-12 text-center md:text-left">
@@ -718,7 +750,7 @@ export default function EmployeeForm() {
             </Dialog>
 
 
-            {/* 3. NUEVO FAMILIAR (Imagen 4c7f9d) */}
+            {/* 3. NUEVO FAMILIAR */}
             <Dialog header="Nuevo familiar" visible={modals.addFamilia} style={{ width: '650px' }} onHide={() => toggleModal('addFamilia', false)}>
                 <div className="p-fluid formgrid grid align-items-end">
 
@@ -753,7 +785,7 @@ export default function EmployeeForm() {
             </Dialog>
 
 
-            {/* 4. AGREGAR HISTORIAL (Imagen 4c7c37) */}
+            {/* 4. AGREGAR HISTORIAL */}
             <Dialog header="Historial" visible={modals.addHistorial} style={{ width: '600px' }} onHide={() => toggleModal('addHistorial', false)}>
                 <div className="p-fluid formgrid grid align-items-center">
 
@@ -784,17 +816,15 @@ export default function EmployeeForm() {
             </Dialog>
 
 
-            {/* 5. ADICIÓN DE CUENTA BANCARIA (Imagen 4c7bdd) */}
+            {/* 5. ADICIÓN DE CUENTA BANCARIA */}
             <Dialog header="Adición de Cuenta" visible={modals.addCuenta} style={{ width: '600px' }} onHide={() => toggleModal('addCuenta', false)}>
                 <div className="p-fluid formgrid grid align-items-end">
 
-                    {/* Fila superior: Input largo + Botón Crear */}
                     <div className="field col-12 md:col-8">
                         <label>Numero de Cuenta:</label>
                         <InputText placeholder="66-89826-33" />
                     </div>
 
-                    {/* Fila inferior: Bancos y Tipos */}
                     <div className="field col-12 md:col-6">
                         <label>Banco:</label>
                         <Dropdown options={MOCK_BANCOS} placeholder="Banco Uno" />
